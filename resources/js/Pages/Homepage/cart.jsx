@@ -64,9 +64,8 @@ const CartPage = ({ cartItems }) => {
         Object.fromEntries(cartItems.map(item => [item.product.id, item.quantity]))
     );
 
-    // เปลี่ยนจาก patch เป็น post
     const { data, setData, post, processing } = useForm({
-        cartUpdates: quantities
+        quantity: quantities
     });
 
     const handleQuantityChange = (productId, newQuantity) => {
@@ -87,13 +86,11 @@ const CartPage = ({ cartItems }) => {
     };
 
     const handleCheckout = () => {
-        // แปลงข้อมูล quantities ให้อยู่ในรูปแบบที่ controller ต้องการ
         const cartData = Object.entries(quantities).map(([product_id, quantity]) => ({
             product_id: parseInt(product_id),
             quantity
         }));
 
-        // ส่งข้อมูลไปอัพเดทที่ server
         post('/cart', {
             cartUpdates: cartData
         }, {
